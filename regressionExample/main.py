@@ -94,8 +94,12 @@ if __name__=="__main__":
     x_data = np.linspace(data.Population.min(), data.Population.max())
     function = theta[0] + (theta[1] * x_data)
 
+    # Create graph with Function plotted
     plot_hypothesis_without_predicted_value(x_data, function)
-    plot_cost_function_over_iterations(np.arange(ITERATIONS), j_gradients)
+
+    # Create graph with cost function over iterations (only for Gradient Descent)
+    if (type(algorithm) is GradientDescent):
+        plot_cost_function_over_iterations(np.arange(ITERATIONS), j_gradients)
 
     while True:
         valueToPredict = int(input("Value  to predict: "))
