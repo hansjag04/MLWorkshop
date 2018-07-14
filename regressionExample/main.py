@@ -77,17 +77,15 @@ if __name__=="__main__":
 
     # Separate X and Y data frames
     x_array = data[["Ones", "Population"]]
-    m_size, n_categories = x_array.shape
+    y_output = data[["Profit"]]
 
-    y_array = np.zeros(shape=m_size)
-    for i in range(m_size):
-        y_array[i] = data.Profit[i]
+    m_size, n_categories = x_array.shape
 
     # Choose algorithm between Normal Equation and Gradient Descent
     algorithm = choose_algorithm()
 
-    theta = np.ones(n_categories)
-    theta, j_gradients = algorithm.get_theta(theta, x_array, y_array)
+    theta = np.ones((n_categories, 1))
+    theta, j_gradients = algorithm.get_theta(theta, x_array, y_output)
     print("theta found:",theta)
 
     # Calculate function

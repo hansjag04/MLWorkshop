@@ -12,7 +12,7 @@ class GradientDescent(tc.ThetaCalculator):
         self.iterations = iterations
 
     def get_theta(self, theta, x_training_set, y_output):
-        m_size = len(x_training_set)
+        m_size = x_training_set.shape[0]
         x_transpose = x_training_set.transpose()
 
         # Costs in all iterations
@@ -21,12 +21,13 @@ class GradientDescent(tc.ThetaCalculator):
         for i in range(self.iterations):
             # Calculate hypothesis
             hypothesis = self.calculate_hypothesis(theta, x_training_set)
+            error = hypothesis - y_output
 
             # Save cost
-            j_costs[i] = self.calculate_cost(hypothesis, m_size, y_output)
+            j_costs[i] = self.calculate_cost(error, m_size)
 
             # Update theta
-            gradient = self.calculate_gradient(hypothesis, m_size, x_transpose, y_output)
+            gradient = self.calculate_gradient(x_transpose, error, m_size)
             theta = theta - self.alpha * gradient
 
         return theta, j_costs
@@ -34,8 +35,9 @@ class GradientDescent(tc.ThetaCalculator):
     def calculate_hypothesis(self, theta, x_training_set):
         return np.dot(x_training_set, theta)
 
-    def calculate_gradient(self, hypothesis, m_size, x_transpose, y_output):
-        return  np.dot(x_transpose, hypothesis - y_output) / m_size
+    def calculate_gradient(self, x_transpose, error, m_size):
+        return  np.dot(x_transpose, error) / m_size
 
-    def calculate_cost(self, hypothesis, m_size, y_output):
-        return np.sum((hypothesis - y_output) ** 2) / (2 * m_size)
+    # Loss Cost function J(theta) = 1/2m * (SUM[i=0, m](h(X[i]) - Y[i])**2)
+    def calculate_cost(self, error, m_size):
+        return np.sum(error ** 2) / (2 * m_size)
